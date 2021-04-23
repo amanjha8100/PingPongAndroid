@@ -4,13 +4,67 @@ from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProper
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
+from kivy.lang.builder import Builder
+
+Builder.load_string("""
+<PongBall>:
+    size: 50,50
+    canvas:
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
+<PongPaddle>:
+    size: 25,200
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+
+<PongGame>:
+    ball: pong_ball
+    player1: player_left
+    player2: player_right
+    canvas:
+        Rectangle:
+            pos: self.center_x - 5, 0
+            size: 10, self.height
+    
+    Label:
+        font_size: 70
+        center_x: root.width/4
+        top: root.top - 50
+        text: str(root.player2.score)
+
+    Label:
+        font_size: 70
+        center_x: root.width * 3/4
+        top: root.top - 50
+        text: str(root.player1.score)
+
+    PongBall:
+        id: pong_ball
+        center: self.parent.center
+
+    PongPaddle:
+        id:player_left
+        x: root.x
+        center_y: root.center_y
+
+    PongPaddle:
+        id:player_right
+        x: root.width-self.width
+        center_y: root.center_y
+""")
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
     def bounce_ball(self,ball):
         #collide widget is a pre-defined function which check if two widgets have collided
         if self.collide_widget(ball):
-            ball.velocity_x *= -1
+            ball.velocity_x *= -1.01
 
 
 class PongBall(Widget):
