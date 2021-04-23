@@ -64,7 +64,7 @@ class PongPaddle(Widget):
     def bounce_ball(self,ball):
         #collide widget is a pre-defined function which check if two widgets have collided
         if self.collide_widget(ball):
-            ball.velocity_x *= -1.01
+            ball.velocity_x *= -1
 
 
 class PongBall(Widget):
@@ -110,9 +110,26 @@ class PongGame(Widget):
 
     def on_touch_move(self, touch):
         if touch.x < self.width/ 1/2:
-            self.player1.center_y = touch.y
+            # if touch.y < self.height/4:
+            #     self.player1.center_y = touch.y
+            # else:
+            #     self.player1.center_y = touch.y + self.height/4
+            self.player1.center_y += touch.dy
+            if self.player1.center_y > self.height:
+                self.player1.center_y = 0.0
+            if self.player1.center_y < 0:
+                self.player1.center_y = self.height
         if touch.x > self.width * 1/2:
-            self.player2.center_y = touch.y
+            # if touch.y < self.height/4:
+            #     self.player2.center_y = touch.y
+            # else:
+            #     self.player2.center_y = touch.y + self.height/4
+            self.player2.center_y += touch.dy
+            if self.player2.center_y > self.height:
+                self.player2.center_y = 0.0
+            if self.player2.center_y < 0:
+                self.player2.center_y = self.height
+            
 
 class PongApp(App):
     def build(self):
